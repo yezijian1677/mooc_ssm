@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--Bean UserService的创建权交给了Spring-->
+    <bean id="userService" class="com.imooc.ioc.demo1.UserServiceImpl">
+        <!--设置属性-->
+        <property name="name" value="李四"></property>
+    </bean>
+
+    <bean id="foodService" class="com.imooc.ioc.demo1.SpringFoodImpl">
+        <property name="name" value="香蕉"></property>
+        <property name="tatste" value="甜甜"></property>
+        <property name="foodCate" value="水果"></property>
+    </bean>
+
+    <!--bean的实例化的三种方式-->
+    <!--第一种 无参构造器-->
+    <!--<bean id="bean1" class="demo2.Bean1"></bean>-->
+    <!--第二种方式-->
+    <!--<bean id="bean2" class="demo2.Bean2Factory" factory-method="createBean2"></bean>-->
+    <!--第三种 实例工厂-->
+    <!--<bean id="bean3Facotry" class="demo2.Bean3Factory"></bean>-->
+    <!--<bean id="bean3" factory-bean="bean3Facotry" factory-method="createBean3"></bean>-->
+
+    <!--Bean的作用域-->
+    <bean id="person" class="demo3.Person" scope="prototype"></bean>
+
+    <bean id="man" class="demo3.Man" init-method="setUp" destroy-method="turnDown"></bean>
+</beans>

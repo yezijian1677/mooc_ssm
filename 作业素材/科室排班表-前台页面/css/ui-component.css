@@ -1,0 +1,59 @@
+/* 搜索 */
+.ui-search{
+  background: url(../img/ui-search.jpg) center no-repeat;
+  font-size: 14px;
+  color: #fff;
+}
+.ui-search-selected{
+  line-height: 38px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 70px;
+  text-indent: 14px;
+}
+.ui-search-select-list{
+  position: absolute;
+  width: 67px;
+  line-height: 24px;
+  background: #fff;
+  box-shadow: 3px 3px 5px rgba(0,0,0,.2);
+  left: 2px;
+  top: 36px;
+}
+.ui-search-select-list a{
+  display: block;
+  color: #A5A2A2;
+  text-align: center;
+}
+.ui-search-select-list a:hover{
+    background: #ebeef5;
+}
+.ui-search-input{
+  width: 208px;
+  height: 26px;
+  position: absolute;
+  left: 71px;
+  line-height: 26px;
+  color: #A5A2A2;
+  font-size: 13px;
+  top: 5px;
+}
+.ui-search-submit{
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 1px;
+  height: 36px;
+  width: 40px;
+}
+/*导航菜单*/
+.ui-menu-item{
+  height: 22px;
+  line-height: 22px;
+  padding: 8px 5px 9px 6px;
+  margin-left: 2px; 
+}
+.ui-menu-item:hover{
+ background: #fff;
+}

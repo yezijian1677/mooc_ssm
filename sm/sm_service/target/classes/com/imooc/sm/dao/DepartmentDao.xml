@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.imooc.sm.dao.DepartmentDao">
+    <resultMap id="resultMap" type="Department">
+        <!--对应关系，和数据库字段的-->
+        <id property="id" column="id" javaType="Integer"/>
+        <result property="name" column="name" javaType="String"/>
+        <result property="address" column="address" javaType="String"/>
+    </resultMap>
+    
+    <!--添加部门-->
+    <insert id="add" parameterType="Department" useGeneratedKeys="true">
+        insert into department(name, address) values (#{name}, #{address})
+    </insert>
+    
+    <!--删除部门-->
+    <delete id="delete" parameterType="Integer">
+        delete from department where id = #{id}
+    </delete>
+    
+    <!--修改部门-->
+    <update id="update" parameterType="Department">
+        update department set name = #{name}, address = #{address} where id = #{id}
+    </update>
+
+    <!--根据id查部门-->
+    <select id="select" parameterType="Integer" resultMap="resultMap">
+        select * from department where id = #{id}
+    </select>
+    <!--查询所有部门-->
+    <select id="selectAll" resultMap="resultMap">
+        select * from department
+    </select>
+</mapper>
