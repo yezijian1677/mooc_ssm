@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imooc.hsp.dao.SelfDao">
+    <resultMap id="resultMap" type="User">
+        <id property="id" column="id" javaType="Integer"/>
+        <result property="username" column="username" javaType="String"/>
+        <result property="password" column="password" javaType="String"/>
+    </resultMap>
+
+    <select id="selectByUser" parameterType="String" resultMap="resultMap">
+        select * from users where username = #{username}
+    </select>
+</mapper>

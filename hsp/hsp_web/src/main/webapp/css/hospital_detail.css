@@ -1,0 +1,190 @@
+p{
+  display: block;
+}
+.info{
+  height: 260px;
+  /*background: #F7F7F7;*/
+  margin: 20px auto;
+}
+.detail {
+  padding-bottom: 20px;
+  margin-bottom:50px; 
+}
+.detail .caption{
+  border-bottom: 2px solid #60bff2;
+  height: 30px;
+  margin-top: 40px;
+}
+
+.detail .caption .item{
+  color: #00B3EC;
+  display: inline-block;
+  width: 110px;
+  font-size: 15px;
+  line-height: 30px;
+  text-align:center;
+
+}
+.detail .caption .item_focus{
+  color: #ffffff;
+  background: #60bff2;
+}
+
+/*医院介绍*/
+.detail_description{
+  padding: 20px;
+}
+.detail_description p{
+  color: rgb(63, 63, 63);
+  font-family: 微软雅黑,Microsoft YaHei;
+  font-size: 14px;
+  padding: 5px 0;
+  line-height: 27px;
+  text-indent: 2em;
+  text-align: justify;
+}
+/*科室列表*/
+.detail_department{
+  padding: 20px 0
+}
+.detail_department .left{
+  float: left;
+  width: 708px;
+  height: auto;
+}
+.detail_department .left .title{
+  height: 43px;
+  background-color: #f4f6fa;
+  padding-left: 29px;
+  color: #000;
+  height: 43px;
+  line-height: 43px;
+  font-size: 15px;
+}
+dl,dt,dd{
+  margin: 0;
+}
+
+.detail_department .left .table{
+  border-bottom: 1px solid #f4f6fa;
+}
+.detail_department .left .table dl{
+  border: 1px solid #f4f6fa;
+  font-size: 14px;
+  color: #888;
+  font-weight: bold;
+  background-color: #f2fbff;
+  padding-left:  144px ;
+  min-height: 30px;
+  position: relative;
+  border-bottom: none;
+}
+.detail_department .left .table dt{
+  width: 144px;
+  height: 30px;
+  line-height: 30px;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  top: 0;
+  text-align: center;
+}
+
+.detail_department .left .table dd{
+  background-color: #fff;
+  padding: 0 20px;
+  min-height: 30px;
+}
+.detail_department .left .table dd .item{
+  color: #4c4948;
+  line-height: 30px;
+  width: 120px;
+  display: inline-block;
+}
+
+.detail_department .right {
+  float: right;
+  width: 274px;
+}
+.detail_department .right .title{
+    color: #606060;
+    font-size: 15px;
+    background: #f4f6fa;
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+}
+.detail_department .right .title .tip{
+  font-size: 12px;
+  color: #00B3EA;
+}
+.detail_department .right .table{
+  padding: 10px 5px 10px 10px;
+  overflow: auto;
+  height: 222px;
+  border: 1px solid #f4f6fa;
+  line-height: 18px;
+}
+
+.detail_department .right .table dl{
+    font-size: 12px;
+    padding-bottom: 5px;
+    color: #888;
+    overflow: hidden;
+}
+.detail_department .right .table dt{
+    display: inline-block;
+    font-size: 12px;
+    color: #555;
+    float: left;
+    width: 68px;
+}
+.detail_department .right .table  dd{
+    display: inline-block;
+    float: left;
+    font-weight: normal;
+    width: 170px;
+}
+/*须知*/
+.detail_notice {
+  font-size: 12px;
+  line-height: 22px;
+}
+.detail_notice .h2{
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    padding:40px 0 20px 0;
+}
+.detail_notice .h3{
+  font-weight: bold;
+   padding-top: 20px;
+}
+.detail_notice .center{
+  text-align: center;
+  padding: 50px 0;
+}
+/*停诊*/
+.detail_close .h2{
+     text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    padding:40px 0 20px 0;
+}
+.detail_close .table{
+    width: 989px;
+    margin: 0 auto;
+    border-right: 1px solid #dcdddd;
+    border-bottom: 1px solid #dcdddd;
+}
+.detail_close .table td{
+    text-align: center;
+    background: #fff;
+    height: 29px;
+    font-size: 13px;
+    border: 1px solid #dcdddd;
+    padding: 0 6px;
+    border-bottom: none;
+    border-right: none;
+    color: #555;
+}
