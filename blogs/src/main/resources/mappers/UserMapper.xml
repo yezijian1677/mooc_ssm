@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blogs.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.blogs.pojo.User" >
+    <constructor >
+      <idArg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="nickename" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_avatar" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_sex" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_email" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="reg_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="latest_login_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="user_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_description" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.blogs.pojo.User" >
+    <constructor >
+      <idArg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="nickename" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_avatar" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_sex" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_email" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="reg_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="latest_login_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="user_status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_description" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, user_name, password, nickename, user_avatar, user_phone, user_sex, user_email, user_description,
+    reg_time, latest_login_time, user_status
+  </sql>
+  <sql id="Blob_Column_List" >
+    user_description
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.blogs.pojo.User" >
+    insert into user (user_id, user_name, password, 
+      nickename, user_avatar, user_phone, 
+      user_sex, user_email, reg_time, 
+      latest_login_time, user_status, user_description
+      )
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{nickename,jdbcType=VARCHAR}, #{userAvatar,jdbcType=VARCHAR}, #{userPhone,jdbcType=VARCHAR}, 
+      #{userSex,jdbcType=INTEGER}, #{userEmail,jdbcType=VARCHAR}, #{regTime,jdbcType=TIMESTAMP}, 
+      #{latestLoginTime,jdbcType=TIMESTAMP}, #{userStatus,jdbcType=INTEGER}, #{userDescription,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.blogs.pojo.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="nickename != null" >
+        nickename,
+      </if>
+      <if test="userAvatar != null" >
+        user_avatar,
+      </if>
+      <if test="userPhone != null" >
+        user_phone,
+      </if>
+      <if test="userSex != null" >
+        user_sex,
+      </if>
+      <if test="userEmail != null" >
+        user_email,
+      </if>
+      <if test="regTime != null" >
+        reg_time,
+      </if>
+      <if test="latestLoginTime != null" >
+        latest_login_time,
+      </if>
+      <if test="userStatus != null" >
+        user_status,
+      </if>
+      <if test="userDescription != null" >
+        user_description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="nickename != null" >
+        #{nickename,jdbcType=VARCHAR},
+      </if>
+      <if test="userAvatar != null" >
+        #{userAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null" >
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null" >
+        #{userSex,jdbcType=INTEGER},
+      </if>
+      <if test="userEmail != null" >
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null" >
+        #{regTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="latestLoginTime != null" >
+        #{latestLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userStatus != null" >
+        #{userStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userDescription != null" >
+        #{userDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blogs.pojo.User" >
+    update user
+    <set >
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="nickename != null" >
+        nickename = #{nickename,jdbcType=VARCHAR},
+      </if>
+      <if test="userAvatar != null" >
+        user_avatar = #{userAvatar,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null" >
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null" >
+        user_sex = #{userSex,jdbcType=INTEGER},
+      </if>
+      <if test="userEmail != null" >
+        user_email = #{userEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="regTime != null" >
+        reg_time = #{regTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="latestLoginTime != null" >
+        latest_login_time = #{latestLoginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userStatus != null" >
+        user_status = #{userStatus,jdbcType=INTEGER},
+      </if>
+      <if test="userDescription != null" >
+        user_description = #{userDescription,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.blogs.pojo.User" >
+    update user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      nickename = #{nickename,jdbcType=VARCHAR},
+      user_avatar = #{userAvatar,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=INTEGER},
+      user_email = #{userEmail,jdbcType=VARCHAR},
+      reg_time = #{regTime,jdbcType=TIMESTAMP},
+      latest_login_time = #{latestLoginTime,jdbcType=TIMESTAMP},
+      user_status = #{userStatus,jdbcType=INTEGER},
+      user_description = #{userDescription,jdbcType=LONGVARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.blogs.pojo.User" >
+    update user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      nickename = #{nickename,jdbcType=VARCHAR},
+      user_avatar = #{userAvatar,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=INTEGER},
+      user_email = #{userEmail,jdbcType=VARCHAR},
+      reg_time = #{regTime,jdbcType=TIMESTAMP},
+      latest_login_time = #{latestLoginTime,jdbcType=TIMESTAMP},
+      user_status = #{userStatus,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+
+  <select id="checkUserName" resultType="int" parameterType="string" >
+    select count(1) from user
+    where user_name = #{username}
+  </select>
+
+  <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
+    SELECT
+    <include refid="Base_Column_List" />
+    from user
+    where user_name = #{username}
+    and password = #{password}
+  </select>
+
+  <select id="checkUserEmail" resultType="int" parameterType="string" >
+    select count(1) from user
+    where user_email = #{userEmail}
+  </select>
+
+  <select id="checkEmailByUserId" resultType="int" parameterType="map">
+    select count(1) from user
+    where user_email = #{userEmail}
+    and user_id != #{userId}
+  </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tushu.dao.BookDao">
+    <resultMap id="resultMap" type="com.tushu.bean.Book">
+        <!--对应关系，和数据库字段的-->
+        <id property="id" column="id" javaType="Integer"/>
+        <result property="categoryId" column="category_id" javaType="Integer"/>
+        <result property="name" column="name" javaType="String"/>
+        <result property="level" column="level" javaType="Integer"/>
+        <result property="price" column="price" javaType="Integer"/>
+        <result property="imgPath" column="img_path" javaType="String"/>
+        <result property="createTime" column="create_time" javaType="Date"/>
+        <result property="updateTime" column="update_time" javaType="Date"/>
+    </resultMap>
+    
+
+    <insert id="add" parameterType="com.tushu.bean.Book" useGeneratedKeys="true">
+        insert into book(category_id, name, level,price,img_path, create_time, update_time) values (#{categoryId},#{name},#{level},#{price},#{imgPath},#{createTime}, #{updateTime})
+    </insert>
+    
+
+    <delete id="delete" parameterType="Integer">
+        delete from book where id = #{id}
+    </delete>
+    
+
+    <update id="update" parameterType="com.tushu.bean.Book">
+        update book set category_id = #{categoryId},name = #{name}, level = #{level}, price = #{price}, img_path=#{imgPath},  update_time = #{updateTime} where id = #{id}
+    </update>
+
+
+    <select id="select" parameterType="Integer" resultMap="resultMap">
+        select * from book where id = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="resultMap">
+        select * from book
+    </select>
+</mapper>

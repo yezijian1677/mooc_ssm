@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blogs.dao.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.blogs.pojo.Article" >
+    <constructor >
+      <idArg column="article_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="article_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="article_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="article_type" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="article_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.blogs.pojo.Article" >
+    <constructor >
+      <idArg column="article_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="article_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="article_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="article_type" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="article_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="article_content" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    article_id, article_title, user_id, article_count, article_type, article_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    article_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from article
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from article
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.blogs.pojo.Article" >
+    insert into article (article_id, article_title, user_id, 
+      article_count, article_type, article_time, 
+      article_content)
+    values (#{articleId,jdbcType=INTEGER}, #{articleTitle,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{articleCount,jdbcType=INTEGER}, #{articleType,jdbcType=INTEGER}, #{articleTime,jdbcType=TIMESTAMP}, 
+      #{articleContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.blogs.pojo.Article" >
+    insert into article
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="articleId != null" >
+        article_id,
+      </if>
+      <if test="articleTitle != null" >
+        article_title,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="articleCount != null" >
+        article_count,
+      </if>
+      <if test="articleType != null" >
+        article_type,
+      </if>
+      <if test="articleTime != null" >
+        article_time,
+      </if>
+      <if test="articleContent != null" >
+        article_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="articleId != null" >
+        #{articleId,jdbcType=INTEGER},
+      </if>
+      <if test="articleTitle != null" >
+        #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="articleCount != null" >
+        #{articleCount,jdbcType=INTEGER},
+      </if>
+      <if test="articleType != null" >
+        #{articleType,jdbcType=INTEGER},
+      </if>
+      <if test="articleTime != null" >
+        #{articleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleContent != null" >
+        #{articleContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blogs.pojo.Article" >
+    update article
+    <set >
+      <if test="articleTitle != null" >
+        article_title = #{articleTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="articleCount != null" >
+        article_count = #{articleCount,jdbcType=INTEGER},
+      </if>
+      <if test="articleType != null" >
+        article_type = #{articleType,jdbcType=INTEGER},
+      </if>
+      <if test="articleTime != null" >
+        article_time = #{articleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="articleContent != null" >
+        article_content = #{articleContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.blogs.pojo.Article" >
+    update article
+    set article_title = #{articleTitle,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      article_count = #{articleCount,jdbcType=INTEGER},
+      article_type = #{articleType,jdbcType=INTEGER},
+      article_time = #{articleTime,jdbcType=TIMESTAMP},
+      article_content = #{articleContent,jdbcType=LONGVARCHAR}
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.blogs.pojo.Article" >
+    update article
+    set article_title = #{articleTitle,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      article_count = #{articleCount,jdbcType=INTEGER},
+      article_type = #{articleType,jdbcType=INTEGER},
+      article_time = #{articleTime,jdbcType=TIMESTAMP}
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </update>
+</mapper>

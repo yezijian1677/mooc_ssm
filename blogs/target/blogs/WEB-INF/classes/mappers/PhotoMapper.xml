@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blogs.dao.PhotoMapper" >
+  <resultMap id="BaseResultMap" type="com.blogs.pojo.Photo" >
+    <constructor >
+      <idArg column="photo_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.blogs.pojo.Photo" >
+    <constructor >
+      <idArg column="photo_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="photo_path" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    photo_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    photo_path
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from my_photo
+    where photo_id = #{photoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from my_photo
+    where photo_id = #{photoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.blogs.pojo.Photo" >
+    insert into my_photo (photo_id, photo_path)
+    values (#{photoId,jdbcType=INTEGER}, #{photoPath,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.blogs.pojo.Photo" >
+    insert into my_photo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="photoId != null" >
+        photo_id,
+      </if>
+      <if test="photoPath != null" >
+        photo_path,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="photoId != null" >
+        #{photoId,jdbcType=INTEGER},
+      </if>
+      <if test="photoPath != null" >
+        #{photoPath,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blogs.pojo.Photo" >
+    update my_photo
+    <set >
+      <if test="photoPath != null" >
+        photo_path = #{photoPath,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where photo_id = #{photoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.blogs.pojo.Photo" >
+    update my_photo
+    set photo_path = #{photoPath,jdbcType=LONGVARCHAR}
+    where photo_id = #{photoId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.blogs.dao.SystemMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.blogs.pojo.SystemMessage" >
+    <constructor >
+      <idArg column="notice_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="is_read" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="notice_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.blogs.pojo.SystemMessage" >
+    <constructor >
+      <idArg column="notice_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="is_read" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="notice_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="notice_desc" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    notice_id, user_id, is_read, notice_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    notice_desc
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from system_message
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from system_message
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.blogs.pojo.SystemMessage" >
+    insert into system_message (notice_id, user_id, is_read, 
+      notice_time, notice_desc)
+    values (#{noticeId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{isRead,jdbcType=INTEGER}, 
+      #{noticeTime,jdbcType=TIMESTAMP}, #{noticeDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.blogs.pojo.SystemMessage" >
+    insert into system_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="noticeId != null" >
+        notice_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="isRead != null" >
+        is_read,
+      </if>
+      <if test="noticeTime != null" >
+        notice_time,
+      </if>
+      <if test="noticeDesc != null" >
+        notice_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="noticeId != null" >
+        #{noticeId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isRead != null" >
+        #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="noticeTime != null" >
+        #{noticeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noticeDesc != null" >
+        #{noticeDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.blogs.pojo.SystemMessage" >
+    update system_message
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isRead != null" >
+        is_read = #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="noticeTime != null" >
+        notice_time = #{noticeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noticeDesc != null" >
+        notice_desc = #{noticeDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.blogs.pojo.SystemMessage" >
+    update system_message
+    set user_id = #{userId,jdbcType=INTEGER},
+      is_read = #{isRead,jdbcType=INTEGER},
+      notice_time = #{noticeTime,jdbcType=TIMESTAMP},
+      notice_desc = #{noticeDesc,jdbcType=LONGVARCHAR}
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.blogs.pojo.SystemMessage" >
+    update system_message
+    set user_id = #{userId,jdbcType=INTEGER},
+      is_read = #{isRead,jdbcType=INTEGER},
+      notice_time = #{noticeTime,jdbcType=TIMESTAMP}
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </update>
+</mapper>

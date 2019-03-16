@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tushu.dao.CategoryDao">
+    <resultMap id="resultMap" type="com.tushu.bean.Category">
+        <!--对应关系，和数据库字段的-->
+        <id property="id" column="id" javaType="Integer"/>
+        <result property="name" column="name" javaType="String"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP" javaType="Date"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP" javaType="Date"/>
+    </resultMap>
+    
+
+    <insert id="add" parameterType="com.tushu.bean.Category" useGeneratedKeys="true">
+        insert into category(name,create_time, update_time) values (#{name},#{createTime}, #{updateTime})
+    </insert>
+    
+
+    <delete id="delete" parameterType="Integer">
+        delete from category where id = #{id}
+    </delete>
+    
+
+    <update id="update" parameterType="com.tushu.bean.Category">
+        update category set name = #{name}, update_time = #{updateTime} where id = #{id}
+    </update>
+
+
+    <select id="select" parameterType="Integer" resultMap="resultMap">
+        select * from category where id = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="resultMap">
+        select * from category
+    </select>
+</mapper>
