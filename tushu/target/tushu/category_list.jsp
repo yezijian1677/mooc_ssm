@@ -19,13 +19,8 @@
 <body>
 <header>
     <div class="container">
-        <c:forEach items="${LIST}" var="list">
-            <nav>
-                <a href="" >${list.name}</a>
-            </nav>
-        </c:forEach>
         <nav>
-            <a href="" >分类</a>
+            <a href="${pageContext.request.contextPath}/book/list.do" >分类</a>
         </nav>
 
     </div>

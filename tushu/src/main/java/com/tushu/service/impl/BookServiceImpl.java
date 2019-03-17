@@ -37,4 +37,9 @@ public class BookServiceImpl implements BookService {
     public List<Book> selectAll() {
         return bookDao.selectAll();
     }
+
+    @Override
+    public List<Book> selectByCategoryId(int id) {
+        return bookDao.selectByCategoryId(id);
+    }
 }

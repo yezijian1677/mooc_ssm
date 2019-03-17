@@ -1,23 +1,76 @@
 package com.tushu.util;
 
-
-import com.sun.imageio.plugins.common.ImageUtil;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferInt;
+import java.awt.image.DirectColorModel;
+import java.awt.image.PixelGrabber;
+import java.awt.image.Raster;
+import java.awt.image.RenderedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+
 public class Imageutil {
+
+    public static BufferedImage change2jpg(File f) {
+        try {
+            java.awt.Image i = Toolkit.getDefaultToolkit().createImage(f.getAbsolutePath());
+            PixelGrabber pg = new PixelGrabber(i, 0, 0, -1, -1, true);
+            pg.grabPixels();
+            int width = pg.getWidth(), height = pg.getHeight();
+            final int[] RGB_MASKS = { 0xFF0000, 0xFF00, 0xFF };
+            final ColorModel RGB_OPAQUE = new DirectColorModel(32, RGB_MASKS[0], RGB_MASKS[1], RGB_MASKS[2]);
+            DataBuffer buffer = new DataBufferInt((int[]) pg.getPixels(), pg.getWidth() * pg.getHeight());
+            WritableRaster raster = Raster.createPackedRaster(buffer, width, height, width, RGB_MASKS, null);
+            BufferedImage img = new BufferedImage(RGB_OPAQUE, raster, false, null);
+            return img;
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void resizeImage(File srcFile, int width,int height, File destFile) {
+        try {
+            Image i = ImageIO.read(srcFile);
+            i = resizeImage(i, width, height);
+            ImageIO.write((RenderedImage) i, "jpg", destFile);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public static Image resizeImage(Image srcImage, int width, int height) {
+        try {
+
+            BufferedImage buffImg = null;
+            buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            buffImg.getGraphics().drawImage(srcImage.getScaledInstance(width, height, Image.SCALE_SMOOTH), 0, 0, null);
+
+            return buffImg;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static InputStream parseUpload(HttpServletRequest request, Map<String, String> params) {
         InputStream is =null;
@@ -48,36 +101,4 @@ public class Imageutil {
         return is;
     }
 
-    public String add(HttpServletRequest request, HttpServletResponse response) {
-        Map<String,String> params = new HashMap<>();
-        InputStream is = parseUpload(request, params);
-
-        String name= params.get("name");
-
-        File imageFolder= new File(request.getSession().getServletContext().getRealPath("img/category"));
-        File file = new File(imageFolder,c.getId()+".jpg");
-
-        try {
-            if(null!=is && 0!=is.available()){
-                try(FileOutputStream fos = new FileOutputStream(file)){
-                    byte b[] = new byte[1024 * 1024];
-                    int length = 0;
-                    while (-1 != (length = is.read(b))) {
-                        fos.write(b, 0, length);
-                    }
-                    fos.flush();
-                    //通过如下代码，把文件保存为jpg格式
-                    BufferedImage img = ImageUtil.change2jpg(file);
-                    ImageIO.write(img, "jpg", file);
-                }
-                catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return "@admin_category_list";
-    }
 }

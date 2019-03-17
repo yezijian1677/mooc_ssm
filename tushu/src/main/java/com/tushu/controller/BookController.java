@@ -1,21 +1,33 @@
 package com.tushu.controller;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tushu.bean.Book;
 import com.tushu.bean.Category;
 import com.tushu.service.BookService;
 import com.tushu.service.CategoryService;
 
+import com.tushu.util.Imageutil;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.io.InputStream;
+import java.util.*;
 
 @Controller("bookController")
 public class BookController {
@@ -25,36 +37,67 @@ public class BookController {
     @Autowired
     private CategoryService categoryService;
 
-    private String receiveImage(HttpServletRequest request) {
-        try{
-            // 如果用户上传了这里代码是不会出现异常 了
-            // 如果没有上传这里出现异常
-            Part part = request.getPart("image");
-            // 保存到项目的路径中去
-            String sysPath = request.getSession().getServletContext().getRealPath("/img/book");
-            // 定义一个新的图片名称
-            String fileName = UUID.randomUUID().toString() ;
-            //  提取图片的类型
-            // 上传文件的内容性质
-            String contentDispostion = part.getHeader("content-disposition");
-            // 获取上传文件的后缀名
-            String suffix = contentDispostion.substring(contentDispostion.lastIndexOf("."), contentDispostion.length() - 1);
-            fileName+=suffix ;
-            // 把图片保存到路径中去
-            part.write(sysPath+"/"+fileName);
-            return fileName ;
-        }catch (Exception e){
-            e.printStackTrace();
-            return null ;
-        }
-    }
-
 
     public void list(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Book> list = bookService.selectAll();
         request.setAttribute("LIST", list);
+        request.setAttribute("CategoryList", categoryService.selectAll());
         request.getRequestDispatcher("../book_list.jsp").forward(request, response);
     }
+
+    public void listByCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        List<Book> list = bookService.selectByCategoryId(id);
+        request.setAttribute("LIST", list);
+        request.setAttribute("CategoryList", categoryService.selectAll());
+        request.getRequestDispatcher("../book_list.jsp").forward(request, response);
+    }
+
+    public void flist(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String  page1 = request.getParameter("page");
+        int page = 0;
+        if (page1 == null){
+            page = 1;
+        }else {
+            page = Integer.parseInt(page1);
+        }
+        int pageSize = 8;
+        PageHelper.startPage(page, pageSize); //开始起始页
+
+        List<Book> list = bookService.selectAll();
+        PageInfo<Book> p = new PageInfo<Book>(list);
+        request.setAttribute("page", p); // 设置属性到前端页面
+        request.setAttribute("LIST", list);
+        request.setAttribute("CategoryList", categoryService.selectAll());
+        request.getRequestDispatcher("../book_flist.jsp").forward(request, response);
+    }
+
+    public void flistByCategoryId(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String  page1 = request.getParameter("page");
+        int page = 0;
+        if (page1 == null){
+            page = 1;
+        }else {
+            page = Integer.parseInt(page1);
+        }
+        int pageSize = 8;
+        PageHelper.startPage(page, pageSize); //开始起始页
+
+
+        int id = Integer.parseInt(request.getParameter("id"));
+        List<Book> list = bookService.selectByCategoryId(id);
+        PageInfo<Book> p = new PageInfo<Book>(list);
+        request.setAttribute("page", p); // 设置属性到前端页面
+
+
+
+
+
+        request.setAttribute("LIST", list);
+        request.setAttribute("CategoryList", categoryService.selectAll());
+        request.getRequestDispatcher("../book_flistByCategoryId.jsp").forward(request, response);
+    }
+
 
     public void delete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
@@ -68,15 +111,41 @@ public class BookController {
     }
 
     public void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String name = request.getParameter("name");
-        System.out.println(request.getParameter("name"));
-        System.out.println(request.getParameter("categoryId"));
-        System.out.println(request.getParameter("level"));
-        System.out.println(request.getParameter("price"));
-        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-        int level = Integer.parseInt(request.getParameter("level"));
-        int price = Integer.parseInt(request.getParameter("price"));
-        String imgPath = receiveImage(request);
+        Map<String,String> params = new HashMap<>();
+        InputStream is = Imageutil.parseUpload(request, params);
+
+        String name = params.get("name");
+        int categoryId = Integer.parseInt(params.get("categoryId"));
+        int level = Integer.parseInt(params.get("level"));
+        int price = Integer.parseInt(params.get("price"));
+
+
+        File imageFolder= new File(request.getSession().getServletContext().getRealPath("img/book"));
+        File file = new File(imageFolder,UUID.randomUUID()+".jpg");
+        file.getParentFile().mkdirs();
+        try {
+            if(null!=is && 0!=is.available()){
+                try(FileOutputStream fos = new FileOutputStream(file)){
+                    byte b[] = new byte[1024 * 1024];
+                    int length = 0;
+                    while (-1 != (length = is.read(b))) {
+                        fos.write(b, 0, length);
+                    }
+                    fos.flush();
+                    //通过如下代码，把文件保存为jpg格式
+                    BufferedImage img = Imageutil.change2jpg(file);
+                    ImageIO.write(img, "jpg", file);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        String imgPath = file.getCanonicalPath();
 
         Book book = new Book();
         book.setName(name);
@@ -96,25 +165,54 @@ public class BookController {
         int id = Integer.parseInt(request.getParameter("id"));
         Book book = bookService.select(id);
         request.setAttribute("book", book);
-
+        request.setAttribute("CategoryList", categoryService.selectAll());
         request.getRequestDispatcher("../book_edit.jsp").forward(request, response);
     }
 
     public void edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
+        Map<String,String> params = new HashMap<>();
+        InputStream is = Imageutil.parseUpload(request, params);
+        int id = Integer.parseInt(params.get("id"));
+        String name = params.get("name");
+        int categoryId = Integer.parseInt(params.get("categoryId"));
+        int level = Integer.parseInt(params.get("level"));
+        int price = Integer.parseInt(params.get("price"));
 
-        int categoryId = Integer.parseInt(request.getParameter("categoryId"));
-        int level = Integer.parseInt(request.getParameter("level"));
-        int price = Integer.parseInt(request.getParameter("price"));
-        String imgPath = receiveImage(request);
+        File imageFolder= new File(request.getSession().getServletContext().getRealPath("img/book"));
+        File file = new File(imageFolder,UUID.randomUUID()+".jpg");
+        file.getParentFile().mkdirs();
+        try {
+            if(null!=is && 0!=is.available()){
+                try(FileOutputStream fos = new FileOutputStream(file)){
+                    byte b[] = new byte[1024 * 1024];
+                    int length = 0;
+                    while (-1 != (length = is.read(b))) {
+                        fos.write(b, 0, length);
+                    }
+                    fos.flush();
+                    //通过如下代码，把文件保存为jpg格式
+                    BufferedImage img = Imageutil.change2jpg(file);
+                    ImageIO.write(img, "jpg", file);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        String imgPath = file.getCanonicalPath();
 
         Book book = bookService.select(id);
         book.setName(name);
         book.setCategoryId(categoryId);
         book.setLevel(level);
         book.setPrice(price);
-        book.setImgPath(imgPath);
+        if (imgPath!=null){
+            book.setImgPath(imgPath);
+        }
         book.setUpdateTime(new Date());
         bookService.update(book);
         response.sendRedirect("list.do");

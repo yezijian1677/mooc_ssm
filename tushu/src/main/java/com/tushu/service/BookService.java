@@ -10,4 +10,5 @@ public interface BookService {
     int update(Book book);
     Book select(int id);
     List<Book> selectAll();
+    List<Book> selectByCategoryId(int id);
 }
